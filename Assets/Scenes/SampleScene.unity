@@ -644,6 +644,7 @@ GameObject:
   - component: {fileID: 1212428277}
   - component: {fileID: 1212428276}
   - component: {fileID: 1212428275}
+  - component: {fileID: 1212428281}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -675,6 +676,9 @@ MonoBehaviour:
   yMinLimit: -90
   yMaxLimit: 90
   isFirstPerson: 1
+  fallingThreshold: -0.1
+  groundCheckDistance: 0.3
+  slopedLimit: 45
 --- !u!54 &1212428276
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -793,6 +797,19 @@ Transform:
   - {fileID: 1478508863}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1212428281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212428274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e45b2603fd922ac4bbf75f1e65693c9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 0}
 --- !u!1 &1478508862
 GameObject:
   m_ObjectHideFlags: 0

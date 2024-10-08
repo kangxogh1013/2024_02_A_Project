@@ -30,9 +30,14 @@ public class PlayerController : MonoBehaviour
 
     //내부 변수들          
     public bool isFirstPerson = true;      //1인칭 모드 인지 여부 
-    private bool isGrounded;                // 플레이어가 땅에 있는지 여부
+    //private bool isGrounded;                // 플레이어가 땅에 있는지 여부
     private Rigidbody rb;                   // 플레이어가 Rigidbody
 
+    public float fallingThreshold = -0.1f;  //떨어지는 것으로 간주할 수직 속도 임계값
+
+    [Header("Ground Check Setting")]
+    public float groundCheckDistance = 0.3f;
+    public float slopedLimit = 45f;
     void Start()
     {
         rb = GetComponent<Rigidbody>();     //RigidBody 컴포넌트를 가져온다.
@@ -46,8 +51,12 @@ public class PlayerController : MonoBehaviour
     {
         
         HandleRotation();
-        HandleJump();
         HandleCameraToggle();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            HandleJump();
+        }
     }
 
     private void FixedUpdate()
@@ -121,18 +130,17 @@ public class PlayerController : MonoBehaviour
 
 
     //플레이어 점프를 처리하는 함수
-    void HandleJump()
+    public void HandleJump()
     {
-        //       ư                      
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (isGrounded())
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);    //위쪽으로 힘을 가해 점프      
-            isGrounded = false;
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+        
     }
 
     // 플레이어의 이동을 처리하는 함수
-    void HandleMovement()
+    public void HandleMovement()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");               //좌우 입력 (-1 ~ 1)
         float moveVertical = Input.GetAxis("Vertical");                   //앞뒤 입력 (1 ~ -1)
@@ -166,11 +174,17 @@ public class PlayerController : MonoBehaviour
 
         rb.MovePosition(rb.position + movement * moveSpeed * Time.deltaTime);
     }
-
-    //플레이어가 땅에 닿아 있는지 감지      
-    private void OnCollisionStay(Collision collision)
+    public bool isGrounded()   //땅 체크 확인
     {
-        isGrounded = true;              //충돌 중이면 플레이어는 땅에 있다
+        return Physics.Raycast(transform.position, Vector3.down, 2.0f);
+    }
+    public bool isFalling()
+    {
+        return rb.velocity.y < fallingThreshold && !isGrounded();
+    }
+    public float GetVerticalVelocity()
+    {
+        return rb.velocity.y;
     }
 
 }
