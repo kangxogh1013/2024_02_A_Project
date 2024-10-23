@@ -1,16 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class PlayerState         //모든 플레이어 상태의 기본이 되는 추상 클래스
 {
     protected PlayerStateMachine stateMachine;          //상태 머신에 대한 참조 
     protected PlayerController playerController;        //플레이어 컨트롤러에 대한 참조
+    protected PlayerAnimationManger animationManger;
 
     public PlayerState(PlayerStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
         this.playerController = stateMachine.playerController;
+        this.animationManger = stateMachine.GetComponent<PlayerAnimationManger>();
     }
 
     //가상 메서드 들 : 하위 클래스에서 필요에 따라 오버라이드
@@ -65,10 +68,14 @@ public abstract class PlayerState         //모든 플레이어 상태의 기본
     //MoveingState :플레이어가 이동 중인 상태
     public class MoveingState : PlayerState
     {
+        private bool isRunning;
         public MoveingState(PlayerStateMachine stateMachine) : base(stateMachine) { }
 
         public override void Update()
         {
+            //달리기 입력 확인
+            isRunning = Input.GetKey(KeyCode.LeftShift);
+
             CheckTransitions();
         }
         public override void FixedUpdate()
