@@ -10,6 +10,16 @@ public class PlayerInventory : MonoBehaviour
     public int bushCount = 0;               //수풀 개수
     public int treeCount = 0;               //나무 개수 
 
+    //여러 아이템을 한꺼번에 획득 
+    public void AddItem(ItemType itemType, int amount)
+    {
+        //amount 만큼 여러번 AddItem 호출 
+        for (int i = 0; i < amount; i++)
+        {
+            AddItem(itemType);
+        }
+    }
+
     //아이템을 추가하는 함수, 아이템 종류에 따라 해당 아이템의 개수를 증가시킴
     public void AddItem(ItemType itemType)
     {
@@ -32,6 +42,67 @@ public class PlayerInventory : MonoBehaviour
                 treeCount++;                        //나무 개수 증가
                 Debug.Log($"나무 획득! 현재 개수 : {treeCount}");           //현재 나무 개수 출력 
                 break;
+        }
+    }
+
+    public bool Removeitem(ItemType itemType, int amount = 1)
+    {
+        //아이템 종류에 따른 다른 동작 수행 
+        switch (itemType)
+        {
+            case ItemType.Crystal:
+                if (crystalCount >= amount)               //가지고 있는 개수가 충분한지 확인
+                {
+                    crystalCount -= amount;
+                    Debug.Log($"크리스탈 {amount} 사용! 현재 개수 :{crystalCount}");           //현재 크리스탈 개수 출력 
+                    return true;
+                }
+                break;
+
+            case ItemType.Plant:
+                if (plantCount >= amount)                   //가지고 있는 개수가 충분한지 확인
+                {
+                    plantCount -= amount;
+                    Debug.Log($"식물 {amount} 사용!현재 개수 :{plantCount}");           //현재 식물 개수 출력 
+                    return true;
+                }
+                break;
+
+            case ItemType.Bush:
+                if (bushCount >= amount)                   //가지고 있는 개수가 충분한지 확인
+                {
+                    bushCount -= amount;
+                    Debug.Log($"수풀 {amount} 사용! 현재 개수 :{bushCount}");           //현재 수풀 개수 출력 
+                    return true;
+                }
+                break;
+
+            case ItemType.Tree:
+                if (treeCount >= amount)                   //가지고 있는 개수가 충분한지 확인
+                {
+                    treeCount -= amount;
+                    Debug.Log($"나무 {amount} 사용! 현재 개수 :{treeCount}");           //현재 나무 개수 출력 
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    public int GetItemCount(ItemType itemType)     //특정 아이템의 현재 개수를 반환 하는 함수
+    {
+        switch (itemType)
+        {
+            case ItemType.Crystal:
+                return crystalCount;
+            case ItemType.Plant:
+                return plantCount;
+            case ItemType.Bush:
+                return bushCount;
+            case ItemType.Tree:
+                return treeCount;
+            default:
+                return 0;
         }
     }
 
