@@ -53,6 +53,5 @@ public class BuildingCrafter : MonoBehaviour
             inventory.AddItem(recipe.resultItem, recipe.resultAmount);      //아이템 제작
             FloatingTextManager.Instance?.Show($"{recipe.itemName} 제작 완료!", transform.position + Vector3.up);
         }
-    }
 }
 
